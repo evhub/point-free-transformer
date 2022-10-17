@@ -1,6 +1,12 @@
 .PHONY: test
-test: install
+test: highlight
 	python -m point_free_transformer
+
+.PHONY: highlight
+highlight: install
+	pygmentize -f html -S default -a .highlight > pygments.css
+	pygmentize -f html -l coconut -o raw_highlight.html "./point_free_transformer-source/__init__.coco"
+	python -m point_free_transformer.highlight
 
 .PHONY: install
 install: build
@@ -13,7 +19,11 @@ build: clean
 
 .PHONY: clean
 clean:
-	rm -rf ./dist ./build ./point_free_transformer
+	rm -rf ./dist ./build
+
+.PHONY: wipe
+wipe:
+	rm -rf ./point_free_transformer
 
 .PHONY: setup
 setup:

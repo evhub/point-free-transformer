@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xbbfefb76
+# __coconut_hash__ = 0x93e37005
 
 # Compiled with Coconut version 2.0.0 [How Not to Be Seen]
 
@@ -33,21 +33,36 @@ _coconut_sys.path.pop(0)
 
 # Compiled Coconut: -----------------------------------------------------------
 
-from point_free_transformer import *  #1 (line in Coconut source)
+import os  #1 (line in Coconut source)
 
-def run_tests() -> 'None':  #3 (line in Coconut source)
-    example_one_hot_tokens: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = np.eye(n_vocab)[np.random.randint(0, n_vocab, n_seq)]  #4 (line in Coconut source)
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  #3 (line in Coconut source)
 
-    one_layer_transformer_logits: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = one_layer_transformer(example_one_hot_tokens)  #6 (line in Coconut source)
-    assert one_layer_transformer_logits.shape == (n_seq, n_vocab)  #7 (line in Coconut source)
-    assert not np.isnan(one_layer_transformer_logits).any()  #8 (line in Coconut source)
+raw_css_file = os.path.join(root_dir, "pygments.css")  #5 (line in Coconut source)
+raw_highlight_file = os.path.join(root_dir, "raw_highlight.html")  #6 (line in Coconut source)
+full_html_file = os.path.join(root_dir, "point_free_transformer.html")  #7 (line in Coconut source)
 
-    point_free_one_layer_transformer_logits: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = point_free_one_layer_transformer(example_one_hot_tokens)  #10 (line in Coconut source)
-    assert point_free_one_layer_transformer_logits.shape == (n_seq, n_vocab)  #11 (line in Coconut source)
-    assert not np.isnan(point_free_one_layer_transformer_logits).any()  #12 (line in Coconut source)
+def highlight() -> 'None':  #9 (line in Coconut source)
+    with open(raw_css_file, "r") as f:  #10 (line in Coconut source)
+        raw_css = f.read()  #11 (line in Coconut source)
 
-    assert (np.abs(one_layer_transformer_logits - point_free_one_layer_transformer_logits) < eps).all()  #14 (line in Coconut source)
+    with open(raw_highlight_file, "r") as f:  #13 (line in Coconut source)
+        raw_highlight = f.read()  #14 (line in Coconut source)
+
+    full_html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <style>
+    {raw_css}
+    </style>
+    </head>
+    {raw_highlight}
+    </html>
+    """.strip().format(raw_css=raw_css, raw_highlight=raw_highlight)  #26 (line in Coconut source)
+
+    with open(full_html_file, "w") as f:  #31 (line in Coconut source)
+        f.write(full_html)  #32 (line in Coconut source)
 
 
-if __name__ == "__main__":  #16 (line in Coconut source)
-    run_tests()  #17 (line in Coconut source)
+if __name__ == "__main__":  #34 (line in Coconut source)
+    highlight()  #35 (line in Coconut source)

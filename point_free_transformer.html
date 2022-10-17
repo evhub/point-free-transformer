@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+    <style>
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+    </style>
+    </head>
+    <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Literal</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>  <span class="c1"># type: ignore</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">softmax</span>  <span class="c1"># type: ignore</span>
+<span class="kn">from</span> <span class="nn">better_einsum</span> <span class="kn">import</span> <span class="n">einsum</span>
+
+
+<span class="c1"># Constants:</span>
+
+<span class="n">_S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;_S&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span>
+<span class="n">SizedArr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">_S</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">from_literal</span><span class="p">:</span> <span class="n">Any</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">.</span><span class="n">__args__</span> <span class="o">..&gt;</span> <span class="o">.</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">N_vocab</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1024</span><span class="p">]</span>
+<span class="n">n_vocab</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">from_literal</span><span class="p">(</span><span class="n">N_vocab</span><span class="p">)</span>
+
+<span class="n">N_seq</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">64</span><span class="p">]</span>
+<span class="n">n_seq</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">from_literal</span><span class="p">(</span><span class="n">N_seq</span><span class="p">)</span>
+
+<span class="n">N_model</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">256</span><span class="p">]</span>
+<span class="n">n_model</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">from_literal</span><span class="p">(</span><span class="n">N_model</span><span class="p">)</span>
+
+<span class="n">N_heads</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
+<span class="n">n_heads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">from_literal</span><span class="p">(</span><span class="n">N_heads</span><span class="p">)</span>
+
+<span class="n">N_head_size</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span>
+<span class="n">n_head_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">from_literal</span><span class="p">(</span><span class="n">N_head_size</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">n_head_size</span> <span class="o">==</span> <span class="n">n_model</span> <span class="o">//</span> <span class="n">n_heads</span>
+
+<span class="n">N_ff</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span>
+<span class="n">n_ff</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">from_literal</span><span class="p">(</span><span class="n">N_ff</span><span class="p">)</span>
+
+<span class="n">eps</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">5</span>
+
+
+<span class="c1"># Weights:</span>
+
+<span class="n">W_enc</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_vocab</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_vocab</span><span class="p">,</span> <span class="n">n_model</span><span class="p">))</span>
+<span class="n">W_pos</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_model</span><span class="p">))</span>
+
+<span class="n">W_unenc</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_vocab</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,</span> <span class="n">n_vocab</span><span class="p">))</span>
+<span class="n">b_unenc</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_vocab</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_vocab</span><span class="p">,))</span>
+
+<span class="n">ln_gain_unenc</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+<span class="n">ln_bias_unenc</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+
+<span class="n">mask</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_seq</span><span class="p">;</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_seq</span><span class="p">)))[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+<span class="n">ln_gain_attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+<span class="n">ln_bias_attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+
+<span class="n">W_Q</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,</span> <span class="n">n_model</span><span class="p">))</span>
+<span class="n">b_Q</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+
+<span class="n">W_K</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,</span> <span class="n">n_model</span><span class="p">))</span>
+<span class="n">b_K</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+
+<span class="n">W_V</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,</span> <span class="n">n_model</span><span class="p">))</span>
+<span class="n">b_V</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+
+<span class="n">W_O</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,</span> <span class="n">n_model</span><span class="p">))</span>
+<span class="n">b_O</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+
+<span class="n">ln_gain_ff</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+<span class="n">ln_bias_ff</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+
+<span class="n">W_ff_in</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_ff</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,</span> <span class="n">n_ff</span><span class="p">))</span>
+<span class="n">b_ff_in</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_ff</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_ff</span><span class="p">,))</span>
+
+<span class="n">W_ff_out</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_ff</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_ff</span><span class="p">,</span> <span class="n">n_model</span><span class="p">))</span>
+<span class="n">b_ff_out</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
+
+
+<span class="c1"># Point-free one layer transformer:</span>
+
+<span class="n">base_layer_norm</span> <span class="o">=</span> <span class="nb">lift</span><span class="p">(</span><span class="o">/</span><span class="p">)(</span>
+    <span class="nb">lift</span><span class="p">(</span><span class="o">-</span><span class="p">)(</span>
+        <span class="nb">ident</span><span class="p">,</span>
+        <span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="p">(</span>
+        <span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="p">),</span>
+<span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+<span class="n">point_free_one_layer_transformer</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span>
+        <span class="c1"># embed</span>
+        <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_enc</span><span class="p">)</span>
+        <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">/</span> <span class="n">n_model</span><span class="o">**</span><span class="mi">0.5</span><span class="p">)</span>
+        <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">W_pos</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">..&gt;</span> <span class="p">(</span>
+        <span class="c1"># transformer_layer</span>
+        <span class="p">(</span>
+            <span class="c1"># layer_norm</span>
+            <span class="n">base_layer_norm</span>
+            <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">*</span> <span class="n">ln_gain_attn</span><span class="p">)</span>
+            <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">ln_bias_attn</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="o">..&gt;</span> <span class="nb">lift</span><span class="p">(</span><span class="o">+</span><span class="p">)(</span>
+            <span class="nb">ident</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="c1"># multi_head_attn</span>
+                <span class="nb">lift</span><span class="p">(</span><span class="n">einsum</span><span class="o">$</span><span class="p">(</span><span class="s2">&quot;residual[q,h,d] = attn[q,k,h] * V[k,h,d]&quot;</span><span class="p">))(</span>
+                    <span class="n">attn</span><span class="o">=</span><span class="p">(</span>
+                        <span class="nb">lift</span><span class="p">(</span><span class="n">einsum</span><span class="o">$</span><span class="p">(</span><span class="s2">&quot;attn[q,k,h] = Q[q,h,d] * K[k,h,d]&quot;</span><span class="p">))(</span>
+                            <span class="n">Q</span><span class="o">=</span><span class="p">(</span>
+                                <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_Q</span><span class="p">)</span>
+                                <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">b_Q</span><span class="p">)</span>
+                                <span class="o">..&gt;</span> <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">,</span> <span class="n">n_head_size</span><span class="p">)</span>
+                            <span class="p">),</span>
+                            <span class="n">K</span><span class="o">=</span><span class="p">(</span>
+                                <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_K</span><span class="p">)</span>
+                                <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">b_K</span><span class="p">)</span>
+                                <span class="o">..&gt;</span> <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">,</span> <span class="n">n_head_size</span><span class="p">)</span>
+                            <span class="p">),</span>
+                        <span class="p">)</span>
+                        <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">/</span> <span class="n">n_head_size</span><span class="o">**</span><span class="mi">0.5</span><span class="p">)</span>
+                        <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="k">where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)))</span>
+                        <span class="o">..&gt;</span> <span class="n">softmax</span><span class="o">$</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="p">),</span>
+                    <span class="n">V</span><span class="o">=</span><span class="p">(</span>
+                        <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_V</span><span class="p">)</span>
+                        <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">b_V</span><span class="p">)</span>
+                        <span class="o">..&gt;</span> <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">,</span> <span class="n">n_head_size</span><span class="p">)</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+                <span class="o">..&gt;</span> <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_model</span><span class="p">)</span>
+                <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_O</span><span class="p">)</span>
+                <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">b_O</span><span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="o">..&gt;</span> <span class="p">(</span>
+            <span class="c1"># layer_norm</span>
+            <span class="n">base_layer_norm</span>
+            <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">*</span> <span class="n">ln_gain_ff</span><span class="p">)</span>
+            <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">ln_bias_ff</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="o">..&gt;</span> <span class="nb">lift</span><span class="p">(</span><span class="o">+</span><span class="p">)(</span>
+            <span class="nb">ident</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="c1"># feed_forward</span>
+                <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_ff_in</span><span class="p">)</span>
+                <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">b_ff_in</span><span class="p">)</span>
+                <span class="o">..&gt;</span> <span class="nb">lift</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="nb">ident</span><span class="p">,</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">)</span>
+                <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_ff_out</span><span class="p">)</span>
+                <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">b_ff_out</span><span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="o">..&gt;</span> <span class="p">(</span>
+        <span class="c1"># layer_norm</span>
+        <span class="n">base_layer_norm</span>
+        <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">*</span> <span class="n">ln_gain_unenc</span><span class="p">)</span>
+        <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">ln_bias_unenc</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_unenc</span><span class="p">)</span>
+    <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">b_unenc</span><span class="p">)</span>
+<span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+
+<span class="c1"># Reference implementation:</span>
+
+<span class="k">def</span> <span class="nf">transformer_model</span><span class="p">(</span>
+    <span class="n">transformer_layers</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span>
+    <span class="p">)[],</span>
+    <span class="n">one_hot_tokens</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_vocab</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_vocab</span><span class="p">)]:</span>
+    <span class="n">residual</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">one_hot_tokens</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">transformer_layers</span><span class="p">:</span>
+        <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer</span>
+    <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer_norm</span><span class="o">$</span><span class="p">(</span><span class="n">ln_gain_unenc</span><span class="p">,</span> <span class="n">ln_bias_unenc</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">residual</span> <span class="o">@</span> <span class="n">W_unenc</span> <span class="o">+</span> <span class="n">b_unenc</span>
+
+<span class="k">def</span> <span class="nf">layer_norm</span><span class="p">(</span>
+    <span class="n">gain</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">bias</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">residual</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]:</span>
+    <span class="n">residual</span> <span class="o">-=</span> <span class="n">residual</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">residual</span> <span class="o">/=</span> <span class="n">residual</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span>
+    <span class="k">return</span> <span class="n">residual</span> <span class="o">*</span> <span class="n">gain</span> <span class="o">+</span> <span class="n">bias</span>
+
+<span class="k">def</span> <span class="nf">embed</span><span class="p">(</span>
+    <span class="n">one_hot_tokens</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_vocab</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span>
+    <span class="n">one_hot_tokens</span> <span class="o">@</span> <span class="n">W_enc</span> <span class="o">/</span> <span class="n">n_model</span><span class="o">**</span><span class="mi">0.5</span> <span class="o">+</span> <span class="n">W_pos</span>
+
+<span class="k">def</span> <span class="nf">attn_prep</span><span class="p">(</span>
+    <span class="n">W</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">residual</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_heads</span><span class="p">;</span> <span class="n">N_head_size</span><span class="p">)]:</span>
+    <span class="n">residual</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">@</span> <span class="n">W</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">residual</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">,</span> <span class="n">n_head_size</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">multi_head_attn</span><span class="p">(</span>
+    <span class="n">W_Q</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_Q</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">W_K</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_K</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">W_V</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_V</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">W_O</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_O</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">residual</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]:</span>
+
+    <span class="n">Q</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_heads</span><span class="p">;</span> <span class="n">N_head_size</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">|&gt;</span> <span class="n">attn_prep</span><span class="o">$</span><span class="p">(</span><span class="n">W_Q</span><span class="p">,</span> <span class="n">b_Q</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_heads</span><span class="p">;</span> <span class="n">N_head_size</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">|&gt;</span> <span class="n">attn_prep</span><span class="o">$</span><span class="p">(</span><span class="n">W_K</span><span class="p">,</span> <span class="n">b_K</span><span class="p">)</span>
+    <span class="n">V</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_heads</span><span class="p">;</span> <span class="n">N_head_size</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">|&gt;</span> <span class="n">attn_prep</span><span class="o">$</span><span class="p">(</span><span class="n">W_V</span><span class="p">,</span> <span class="n">b_V</span><span class="p">)</span>
+
+    <span class="n">attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_seq</span><span class="p">;</span> <span class="n">N_heads</span><span class="p">)]</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;attn[q,k,h] = Q[q,h,d] * K[k,h,d]&quot;</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+    <span class="n">attn</span> <span class="o">/=</span> <span class="n">n_head_size</span><span class="o">**</span><span class="mi">0.5</span>
+    <span class="n">attn</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="k">where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">))</span>
+    <span class="n">attn</span> <span class="o">|&gt;=</span> <span class="n">softmax</span><span class="o">$</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">output</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_heads</span><span class="p">;</span> <span class="n">N_head_size</span><span class="p">)]</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;residual[q,h,d] = attn[q,k,h] * V[k,h,d]&quot;</span><span class="p">,</span> <span class="n">attn</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span>
+    <span class="n">new_residual</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_model</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_residual</span> <span class="o">@</span> <span class="n">W_O</span> <span class="o">+</span> <span class="n">b_O</span>
+
+<span class="k">def</span> <span class="nf">feed_forward</span><span class="p">(</span>
+    <span class="n">W_ff_in</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_ff</span><span class="p">)],</span>
+    <span class="n">b_ff_in</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_ff</span><span class="p">;)],</span>
+    <span class="n">W_ff_out</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_ff</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_ff_out</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">residual</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]:</span>
+    <span class="n">ff</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_ff</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">@</span> <span class="n">W_ff_in</span> <span class="o">+</span> <span class="n">b_ff_in</span>
+    <span class="n">ff</span> <span class="o">|&gt;=</span> <span class="n">activation</span>
+    <span class="k">return</span> <span class="n">ff</span> <span class="o">@</span> <span class="n">W_ff_out</span> <span class="o">+</span> <span class="n">b_ff_out</span>
+
+<span class="k">def</span> <span class="nf">activation</span><span class="p">(</span>
+    <span class="n">ff</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_ff</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_ff</span><span class="p">)]</span> <span class="o">=</span>
+    <span class="n">ff</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">ff</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">transformer_layer</span><span class="p">(</span>
+    <span class="n">ln_gain_attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">ln_bias_attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">W_Q</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_Q</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">W_K</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_K</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">W_V</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_V</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">W_O</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_O</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">ln_gain_ff</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">ln_bias_ff</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">W_ff_in</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;</span> <span class="n">N_ff</span><span class="p">)],</span>
+    <span class="n">b_ff_in</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_ff</span><span class="p">;)],</span>
+    <span class="n">W_ff_out</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_ff</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+    <span class="n">b_ff_out</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>
+    <span class="n">residual</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]:</span>
+
+    <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer_norm</span><span class="o">$</span><span class="p">(</span><span class="n">ln_gain_attn</span><span class="p">,</span> <span class="n">ln_bias_attn</span><span class="p">)</span>
+    <span class="n">attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">|&gt;</span> <span class="n">multi_head_attn</span><span class="o">$</span><span class="p">(</span><span class="n">W_Q</span><span class="p">,</span> <span class="n">b_Q</span><span class="p">,</span> <span class="n">W_K</span><span class="p">,</span> <span class="n">b_K</span><span class="p">,</span> <span class="n">W_V</span><span class="p">,</span> <span class="n">b_V</span><span class="p">,</span> <span class="n">W_O</span><span class="p">,</span> <span class="n">b_O</span><span class="p">)</span>
+    <span class="n">residual</span> <span class="o">+=</span> <span class="n">attn</span>
+
+    <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer_norm</span><span class="o">$</span><span class="p">(</span><span class="n">ln_gain_ff</span><span class="p">,</span> <span class="n">ln_bias_ff</span><span class="p">)</span>
+    <span class="n">ff</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">|&gt;</span> <span class="n">feed_forward</span><span class="o">$</span><span class="p">(</span><span class="n">W_ff_in</span><span class="p">,</span> <span class="n">b_ff_in</span><span class="p">,</span> <span class="n">W_ff_out</span><span class="p">,</span> <span class="n">b_ff_out</span><span class="p">)</span>
+    <span class="n">residual</span> <span class="o">+=</span> <span class="n">ff</span>
+
+    <span class="k">return</span> <span class="n">residual</span>
+
+<span class="n">one_layer_transformer</span> <span class="o">=</span> <span class="n">transformer_model</span><span class="o">$</span><span class="p">([</span>
+    <span class="n">transformer_layer</span><span class="o">$</span><span class="p">(</span>
+        <span class="n">ln_gain_attn</span><span class="p">,</span>
+        <span class="n">ln_bias_attn</span><span class="p">,</span>
+        <span class="n">W_Q</span><span class="p">,</span>
+        <span class="n">b_Q</span><span class="p">,</span>
+        <span class="n">W_K</span><span class="p">,</span>
+        <span class="n">b_K</span><span class="p">,</span>
+        <span class="n">W_V</span><span class="p">,</span>
+        <span class="n">b_V</span><span class="p">,</span>
+        <span class="n">W_O</span><span class="p">,</span>
+        <span class="n">b_O</span><span class="p">,</span>
+        <span class="n">ln_gain_ff</span><span class="p">,</span>
+        <span class="n">ln_bias_ff</span><span class="p">,</span>
+        <span class="n">W_ff_in</span><span class="p">,</span>
+        <span class="n">b_ff_in</span><span class="p">,</span>
+        <span class="n">W_ff_out</span><span class="p">,</span>
+        <span class="n">b_ff_out</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+
+    </html>

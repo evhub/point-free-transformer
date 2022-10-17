@@ -1,0 +1,35 @@
+import os
+
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+raw_css_file = os.path.join(root_dir, "pygments.css")
+raw_highlight_file = os.path.join(root_dir, "raw_highlight.html")
+full_html_file = os.path.join(root_dir, "point_free_transformer.html")
+
+def highlight() -> None:
+    with open(raw_css_file, "r") as f:
+        raw_css = f.read()
+
+    with open(raw_highlight_file, "r") as f:
+        raw_highlight = f.read()
+
+    full_html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <style>
+    {raw_css}
+    </style>
+    </head>
+    {raw_highlight}
+    </html>
+    """.strip().format(
+        raw_css=raw_css,
+        raw_highlight=raw_highlight,
+    )
+
+    with open(full_html_file, "w") as f:
+        f.write(full_html)
+
+if __name__ == "__main__":
+    highlight()

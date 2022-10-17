@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xa5982ad3
+# __coconut_hash__ = 0xfa480253
 
-# Compiled with Coconut version 2.0.0-post_dev14 [How Not to Be Seen]
+# Compiled with Coconut version 2.0.0 [How Not to Be Seen]
 
 # Coconut Header: -------------------------------------------------------------
 
@@ -35,17 +35,10 @@ _coconut_sys.path.pop(0)
 
 from typing import TypeVar  #1 (line in Coconut source)
 from typing import Any  #1 (line in Coconut source)
-try:  #1 (line in Coconut source)
-    _coconut_sys_0 = sys  #1 (line in Coconut source)
-except _coconut.NameError:  #1 (line in Coconut source)
-    _coconut_sys_0 = _coconut_sentinel  #1 (line in Coconut source)
-sys = _coconut_sys  #1 (line in Coconut source)
-if sys.version_info >= (3, 8):  #1 (line in Coconut source)
+if _coconut_sys.version_info >= (3, 8):  #1 (line in Coconut source)
     from typing import Literal  #1 (line in Coconut source)
 else:  #1 (line in Coconut source)
-    from typing_extensions import Literal  #1 (line in Coconut source)
-if _coconut_sys_0 is not _coconut_sentinel:  #1 (line in Coconut source)
-    sys = _coconut_sys_0  #1 (line in Coconut source)
+    from typing_extensions import Literal  # type: ignore  #1 (line in Coconut source)
 
 import numpy as np  #7 (line in Coconut source)
 from scipy.stats import norm  # type: ignore  #8 (line in Coconut source)
