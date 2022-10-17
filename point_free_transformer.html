@@ -266,6 +266,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer</span>
     <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer_norm</span><span class="o">$</span><span class="p">(</span><span class="n">ln_gain_unenc</span><span class="p">,</span> <span class="n">ln_bias_unenc</span><span class="p">)</span>
     <span class="n">logits</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_vocab</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">@</span> <span class="n">W_unenc</span>
+    <span class="k">return</span> <span class="n">sample_probs</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">sample_probs</span><span class="p">(</span>
+    <span class="n">logits</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_vocab</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_vocab</span><span class="p">)]:</span>
     <span class="n">logits</span> <span class="o">/=</span> <span class="n">sample_temp</span>
     <span class="k">return</span> <span class="n">logits</span> <span class="o">|&gt;</span> <span class="n">softmax</span><span class="o">$</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 

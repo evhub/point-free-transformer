@@ -185,6 +185,11 @@ def transformer_model(
         residual |>= layer
     residual |>= layer_norm$(ln_gain_unenc, ln_bias_unenc)
     logits: SizedArr[(N_seq; N_vocab)] = residual @ W_unenc
+    return sample_probs(logits)
+
+def sample_probs(
+    logits: SizedArr[(N_seq; N_vocab)],
+) -> SizedArr[(N_seq; N_vocab)]:
     logits /= sample_temp
     return logits |> softmax$(axis=-1)
 
