@@ -1,6 +1,6 @@
 # point-free-transformer
 
-A point-free implementation of a transformer-based language model in [Coconut](https://coconut-lang.org/).
+A [point-free](https://en.wikipedia.org/wiki/Tacit_programming) implementation of a one-layer transformer-based language model in [Coconut](https://coconut-lang.org/).
 
 ![](https://i.imgur.com/QSmFE2m.png)
 
