@@ -49,7 +49,6 @@ W_enc: SizedArr[(N_vocab; N_model)] = np.random.normal(size=(n_vocab, n_model))
 W_pos: SizedArr[(N_seq; N_model)] = np.random.normal(size=(n_seq, n_model))
 
 W_unenc: SizedArr[(N_model; N_vocab)] = np.random.normal(size=(n_model, n_vocab))
-b_unenc: SizedArr[(N_vocab;)] = np.random.normal(size=(n_vocab,))
 
 ln_gain_unenc: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
 ln_bias_unenc: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
@@ -166,7 +165,6 @@ point_free_one_layer_transformer = (
         ..> (. + ln_bias_unenc)
     )
     ..> (. @ W_unenc)
-    ..> (. + b_unenc)
 )  # type: ignore
 
 
@@ -182,7 +180,7 @@ def transformer_model(
     for layer in transformer_layers:
         residual |>= layer
     residual |>= layer_norm$(ln_gain_unenc, ln_bias_unenc)
-    return residual @ W_unenc + b_unenc
+    return residual @ W_unenc
 
 def layer_norm(
     gain: SizedArr[(N_model;)],
