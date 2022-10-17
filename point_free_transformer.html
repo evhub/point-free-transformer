@@ -136,6 +136,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <span class="n">mask</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_seq</span><span class="p">;</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_seq</span><span class="p">)))[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
 
+<span class="n">sample_temp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
 <span class="n">ln_gain_attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
 <span class="n">ln_bias_attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
 
@@ -246,6 +248,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">ln_bias_unenc</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_unenc</span><span class="p">)</span>
+    <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">/</span> <span class="n">sample_temp</span><span class="p">)</span>
+    <span class="o">..&gt;</span> <span class="n">softmax</span><span class="o">$</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 
@@ -261,7 +265,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">transformer_layers</span><span class="p">:</span>
         <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer</span>
     <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer_norm</span><span class="o">$</span><span class="p">(</span><span class="n">ln_gain_unenc</span><span class="p">,</span> <span class="n">ln_bias_unenc</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">residual</span> <span class="o">@</span> <span class="n">W_unenc</span>
+    <span class="n">logits</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_vocab</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">@</span> <span class="n">W_unenc</span>
+    <span class="n">logits</span> <span class="o">/=</span> <span class="n">sample_temp</span>
+    <span class="k">return</span> <span class="n">logits</span> <span class="o">|&gt;</span> <span class="n">softmax</span><span class="o">$</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">layer_norm</span><span class="p">(</span>
     <span class="n">gain</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)],</span>

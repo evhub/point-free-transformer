@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xbbfefb76
+# __coconut_hash__ = 0x4fb42283
 
 # Compiled with Coconut version 2.0.0 [How Not to Be Seen]
 
@@ -38,16 +38,18 @@ from point_free_transformer import *  #1 (line in Coconut source)
 def run_tests() -> 'None':  #3 (line in Coconut source)
     example_one_hot_tokens: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = np.eye(n_vocab)[np.random.randint(0, n_vocab, n_seq)]  #4 (line in Coconut source)
 
-    one_layer_transformer_logits: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = one_layer_transformer(example_one_hot_tokens)  #6 (line in Coconut source)
-    assert one_layer_transformer_logits.shape == (n_seq, n_vocab)  #7 (line in Coconut source)
-    assert not np.isnan(one_layer_transformer_logits).any()  #8 (line in Coconut source)
+    one_layer_transformer_probs: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = one_layer_transformer(example_one_hot_tokens)  #6 (line in Coconut source)
+    assert one_layer_transformer_probs.shape == (n_seq, n_vocab)  #7 (line in Coconut source)
+    assert not np.isnan(one_layer_transformer_probs).any()  #8 (line in Coconut source)
+    assert (np.abs(one_layer_transformer_probs.sum(axis=-1) - 1) < eps).all()  #9 (line in Coconut source)
 
-    point_free_one_layer_transformer_logits: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = point_free_one_layer_transformer(example_one_hot_tokens)  #10 (line in Coconut source)
-    assert point_free_one_layer_transformer_logits.shape == (n_seq, n_vocab)  #11 (line in Coconut source)
-    assert not np.isnan(point_free_one_layer_transformer_logits).any()  #12 (line in Coconut source)
+    point_free_one_layer_transformer_probs: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = point_free_one_layer_transformer(example_one_hot_tokens)  #11 (line in Coconut source)
+    assert point_free_one_layer_transformer_probs.shape == (n_seq, n_vocab)  #12 (line in Coconut source)
+    assert not np.isnan(point_free_one_layer_transformer_probs).any()  #13 (line in Coconut source)
+    assert (np.abs(point_free_one_layer_transformer_probs.sum(axis=-1) - 1) < eps).all()  #14 (line in Coconut source)
 
-    assert (np.abs(one_layer_transformer_logits - point_free_one_layer_transformer_logits) < eps).all()  #14 (line in Coconut source)
+    assert (np.abs(one_layer_transformer_probs - point_free_one_layer_transformer_probs) < eps).all()  #16 (line in Coconut source)
 
 
-if __name__ == "__main__":  #16 (line in Coconut source)
-    run_tests()  #17 (line in Coconut source)
+if __name__ == "__main__":  #18 (line in Coconut source)
+    run_tests()  #19 (line in Coconut source)
