@@ -1,6 +1,6 @@
 # point-free-transformer
 
-A point-free implementation of a transformer-based language model (for learning/reference purposes).
+A point-free implementation of a transformer-based language model in [Coconut](https://coconut-lang.org/).
 
 ![](https://i.imgur.com/QSmFE2m.png)
 
