@@ -1,0 +1,319 @@
+from typing import (
+    TypeVar,
+    Any,
+    Literal,
+)
+
+import numpy as np
+from scipy.stats import norm
+from scipy.special import softmax
+from better_einsum import einsum
+
+
+# Constants:
+
+_S = TypeVar("_S", bound=tuple[int, ...])
+SizedArr = np.ndarray[_S, np.dtype[Any]]
+
+N = TypeVar("N", bound=int)
+M = TypeVar("M", bound=int)
+L = TypeVar("L", bound=int)
+
+from_literal: Any -> int = .__args__ ..> .[0]
+
+N_vocab = Literal[1024]
+n_vocab: int = from_literal(N_vocab)
+
+N_seq = Literal[64]
+n_seq: int = from_literal(N_seq)
+
+N_model = Literal[256]
+n_model: int = from_literal(N_model)
+
+N_heads = Literal[8]
+n_heads: int = from_literal(N_heads)
+
+N_head_size = Literal[32]
+n_head_size: int = from_literal(N_head_size)
+assert n_head_size == n_model // n_heads
+
+N_ff = Literal[128]
+n_ff: int = from_literal(N_ff)
+
+eps = 1e-5
+
+
+# Weights:
+
+W_enc: SizedArr[(N_vocab; N_model)] = np.random.normal(size=(n_vocab, n_model))
+W_pos: SizedArr[(N_seq; N_model)] = np.random.normal(size=(n_seq, n_model))
+
+W_unenc: SizedArr[(N_model; N_vocab)] = np.random.normal(size=(n_model, n_vocab))
+b_unenc: SizedArr[(N_vocab;)] = np.random.normal(size=(n_vocab,))
+
+ln_gain_unenc: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+ln_bias_unenc: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+
+mask: SizedArr[(N_seq; N_seq; Literal[1])] = np.tril(np.ones((n_seq, n_seq)))[..., None]
+
+ln_gain_attn: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+ln_bias_attn: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+
+W_Q: SizedArr[(N_model; N_model)] = np.random.normal(size=(n_model, n_model))
+b_Q: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+
+W_K: SizedArr[(N_model; N_model)] = np.random.normal(size=(n_model, n_model))
+b_K: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+
+W_V: SizedArr[(N_model; N_model)] = np.random.normal(size=(n_model, n_model))
+b_V: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+
+W_O: SizedArr[(N_model; N_model)] = np.random.normal(size=(n_model, n_model))
+b_O: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+
+ln_gain_ff: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+ln_bias_ff: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+
+W_ff_in: SizedArr[(N_model; N_ff)] = np.random.normal(size=(n_model, n_ff))
+b_ff_in: SizedArr[(N_ff;)] = np.random.normal(size=(n_ff,))
+
+W_ff_out: SizedArr[(N_ff; N_model)] = np.random.normal(size=(n_ff, n_model))
+b_ff_out: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
+
+
+# Point-free one layer transformer:
+
+base_layer_norm = lift(/)(
+    lift(-)(
+        ident,
+        .mean(axis=-1, keepdims=True),
+    ),
+    (
+        .var(axis=-1, keepdims=True)
+        ..> (. + eps)
+    ),
+)
+
+point_free_one_layer_transformer = (
+    (
+        # embed
+        (. @ W_enc)
+        ..> (. / n_model**0.5)
+        ..> (. + W_pos)
+    ) ..> (
+        # transformer_layer
+        (
+            # layer_norm
+            base_layer_norm
+            ..> (. * ln_gain_attn)
+            ..> (. + ln_bias_attn)
+        )
+        ..> lift(+)(
+            ident,
+            (
+                # multi_head_attn
+                lift(einsum$("residual[q,h,d] = attn[q,k,h] * V[k,h,d]"))(
+                    attn=(
+                        lift(einsum$("attn[q,k,h] = Q[q,h,d] * K[k,h,d]"))(
+                            Q=(
+                                (. @ W_Q)
+                                ..> (. + b_Q)
+                                ..> .reshape(n_seq, n_heads, n_head_size)
+                            ),
+                            K=(
+                                (. @ W_K)
+                                ..> (. + b_K)
+                                ..> .reshape(n_seq, n_heads, n_head_size)
+                            ),
+                        )
+                        ..> (. / n_head_size**0.5)
+                        ..> (. + np.where(mask, 0, float("-inf")))
+                        ..> softmax$(axis=1)
+                    ),
+                    V=(
+                        (. @ W_V)
+                        ..> (. + b_V)
+                        ..> .reshape(n_seq, n_heads, n_head_size)
+                    ),
+                )
+                ..> .reshape(n_seq, n_model)
+                ..> (. @ W_O)
+                ..> (. + b_O)
+            ),
+        )
+        ..> (
+            # layer_norm
+            base_layer_norm
+            ..> (. * ln_gain_ff)
+            ..> (. + ln_bias_ff)
+        )
+        ..> lift(+)(
+            ident,
+            (
+                # feed_forward
+                (. @ W_ff_in)
+                ..> (. + b_ff_in)
+                ..> lift(*)(ident, norm.cdf)
+                ..> (. @ W_ff_out)
+                ..> (. + b_ff_out)
+            ),
+        )
+    )
+    ..> (
+        # layer_norm
+        base_layer_norm
+        ..> (. * ln_gain_unenc)
+        ..> (. + ln_bias_unenc)
+    )
+    ..> (. @ W_unenc)
+    ..> (. + b_unenc)
+)
+
+
+# Reference implementation:
+
+def transformer_model(
+    transformer_layers: (
+        SizedArr[(N_seq; N_model)] -> SizedArr[(N_seq; N_model)]
+    )[],
+    one_hot_tokens: SizedArr[(N_seq; N_vocab)],
+) -> SizedArr[(N_seq; N_vocab)]:
+    residual: SizedArr[(N_seq; N_model)] = one_hot_tokens
+    residual |>= embed
+    for layer in transformer_layers:
+        residual |>= layer
+    residual |>= layer_norm$(ln_gain_unenc, ln_bias_unenc)
+    return residual @ W_unenc + b_unenc
+
+def layer_norm(
+    gain: SizedArr[(N_model;)],
+    bias: SizedArr[(N_model;)],
+    residual: SizedArr[(N_seq; N_model)],
+) -> SizedArr[(N_seq; N_model)]:
+    residual -= residual.mean(axis=-1, keepdims=True)
+    residual /= residual.var(axis=-1, keepdims=True) + eps
+    return residual * gain + bias
+
+def embed(
+    one_hot_tokens: SizedArr[(N_seq; N_vocab)],
+) -> SizedArr[(N_seq; N_model)] =
+    one_hot_tokens @ W_enc / n_model**0.5 + W_pos
+
+def attn_prep(
+    W: SizedArr[(N_model; N_model)],
+    b: SizedArr[(N_model;)],
+    residual: SizedArr[(N_seq; N_model)],
+) -> SizedArr[(N_seq; N_heads; N_head_size)]:
+    residual = residual @ W + b
+    return residual.reshape(n_seq, n_heads, n_head_size)
+
+def multi_head_attn(
+    W_Q: SizedArr[(N_model; N_model)],
+    b_Q: SizedArr[(N_model;)],
+    W_K: SizedArr[(N_model; N_model)],
+    b_K: SizedArr[(N_model;)],
+    W_V: SizedArr[(N_model; N_model)],
+    b_V: SizedArr[(N_model;)],
+    W_O: SizedArr[(N_model; N_model)],
+    b_O: SizedArr[(N_model;)],
+    residual: SizedArr[(N_seq; N_model)],
+) -> SizedArr[(N_seq; N_model)]:
+
+    Q: SizedArr[(N_seq; N_heads; N_head_size)] = residual |> attn_prep$(W_Q, b_Q)
+    K: SizedArr[(N_seq; N_heads; N_head_size)] = residual |> attn_prep$(W_K, b_K)
+    V: SizedArr[(N_seq; N_heads; N_head_size)] = residual |> attn_prep$(W_V, b_V)
+
+    attn: SizedArr[(N_seq; N_seq; N_heads)] = einsum("attn[q,k,h] = Q[q,h,d] * K[k,h,d]", Q, K)
+    attn /= n_head_size**0.5
+    attn += np.where(mask, 0, float("-inf"))
+    attn |>= softmax$(axis=1)
+
+    output: SizedArr[(N_seq; N_heads; N_head_size)] = einsum("residual[q,h,d] = attn[q,k,h] * V[k,h,d]", attn, V)
+    new_residual: SizedArr[(N_seq; N_model)] = output.reshape(n_seq, n_model)
+    return new_residual @ W_O + b_O
+
+def feed_forward(
+    W_ff_in: SizedArr[(N_model; N_ff)],
+    b_ff_in: SizedArr[(N_ff;)],
+    W_ff_out: SizedArr[(N_ff; N_model)],
+    b_ff_out: SizedArr[(N_model;)],
+    residual: SizedArr[(N_seq; N_model)],
+) -> SizedArr[(N_seq; N_model)]:
+    ff: SizedArr[(N_seq; N_ff)] = residual @ W_ff_in + b_ff_in
+    ff |>= activation
+    return ff @ W_ff_out + b_ff_out
+
+def activation(
+    ff: SizedArr[(N_seq; N_ff)],
+) -> SizedArr[(N_seq; N_ff)] =
+    ff * norm.cdf(ff)
+
+def transformer_layer(
+    ln_gain_attn: SizedArr[(N_model;)],
+    ln_bias_attn: SizedArr[(N_model;)],
+    W_Q: SizedArr[(N_model; N_model)],
+    b_Q: SizedArr[(N_model;)],
+    W_K: SizedArr[(N_model; N_model)],
+    b_K: SizedArr[(N_model;)],
+    W_V: SizedArr[(N_model; N_model)],
+    b_V: SizedArr[(N_model;)],
+    W_O: SizedArr[(N_model; N_model)],
+    b_O: SizedArr[(N_model;)],
+    ln_gain_ff: SizedArr[(N_model;)],
+    ln_bias_ff: SizedArr[(N_model;)],
+    W_ff_in: SizedArr[(N_model; N_ff)],
+    b_ff_in: SizedArr[(N_ff;)],
+    W_ff_out: SizedArr[(N_ff; N_model)],
+    b_ff_out: SizedArr[(N_model;)],
+    residual: SizedArr[(N_seq; N_model)],
+) -> SizedArr[(N_seq; N_model)]:
+
+    residual |>= layer_norm$(ln_gain_attn, ln_bias_attn)
+    attn: SizedArr[(N_seq; N_model)] = residual |> multi_head_attn$(W_Q, b_Q, W_K, b_K, W_V, b_V, W_O, b_O)
+    residual += attn
+
+    residual |>= layer_norm$(ln_gain_ff, ln_bias_ff)
+    ff: SizedArr[(N_seq; N_model)] = residual |> feed_forward$(W_ff_in, b_ff_in, W_ff_out, b_ff_out)
+    residual += ff
+
+    return residual
+
+one_layer_transformer = transformer_model$([
+    transformer_layer$(
+        ln_gain_attn,
+        ln_bias_attn,
+        W_Q,
+        b_Q,
+        W_K,
+        b_K,
+        W_V,
+        b_V,
+        W_O,
+        b_O,
+        ln_gain_ff,
+        ln_bias_ff,
+        W_ff_in,
+        b_ff_in,
+        W_ff_out,
+        b_ff_out,
+    ),
+])
+
+
+# Tests:
+
+def run_tests() -> None:
+    example_one_hot_tokens: SizedArr[(N_seq; N_vocab)] = np.eye(n_vocab)[np.random.randint(0, n_vocab, n_seq)]
+
+    one_layer_transformer_logits: SizedArr[(N_seq; N_vocab)] = one_layer_transformer(example_one_hot_tokens)
+    assert one_layer_transformer_logits.shape == (n_seq, n_vocab)
+    assert not np.isnan(one_layer_transformer_logits).any()
+
+    point_free_one_layer_transformer_logits: SizedArr[(N_seq; N_vocab)] = point_free_one_layer_transformer(example_one_hot_tokens)
+    assert point_free_one_layer_transformer_logits.shape == (n_seq, n_vocab)
+    assert not np.isnan(point_free_one_layer_transformer_logits).any()
+
+    assert (np.abs(one_layer_transformer_logits - point_free_one_layer_transformer_logits) < eps).all()
+
+if __name__ == "__main__":
+    run_tests()
