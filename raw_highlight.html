@@ -167,8 +167,11 @@
         <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">+</span> <span class="n">ln_bias_unenc</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">@</span> <span class="n">W_unenc</span><span class="p">)</span>
-    <span class="o">..&gt;</span> <span class="p">(</span><span class="o">.</span> <span class="o">/</span> <span class="n">sample_temp</span><span class="p">)</span>
-    <span class="o">..&gt;</span> <span class="n">softmax</span><span class="o">$</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">..&gt;</span> <span class="p">(</span>
+        <span class="c1"># sample_probs</span>
+        <span class="p">(</span><span class="o">.</span> <span class="o">/</span> <span class="n">sample_temp</span><span class="p">)</span>
+        <span class="o">..&gt;</span> <span class="n">softmax</span><span class="o">$</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
 <span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 

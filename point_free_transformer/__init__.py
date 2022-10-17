@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x4d78e8f0
+# __coconut_hash__ = 0x5498727
 
 # Compiled with Coconut version 2.0.0 [How Not to Be Seen]
 
@@ -122,80 +122,80 @@ b_ff_out: 'SizedArr[_coconut.typing.Tuple[N_model,]]' = np.random.normal(size=(n
 
 base_layer_norm = lift(_coconut.operator.truediv)(lift(_coconut_minus)(ident, _coconut.operator.methodcaller("mean", axis=-1, keepdims=True)), (_coconut_base_compose(_coconut.operator.methodcaller("var", axis=-1, keepdims=True), ((_coconut_partial(_coconut.operator.add, {1: eps}, 2, ())), 0))))  # type: ignore  #87 (line in Coconut source)
 
-point_free_one_layer_transformer = (_coconut_base_compose((_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_enc}, 2, ())), ((_coconut_partial(_coconut.operator.truediv, {1: n_model**0.5}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: W_pos}, 2, ())), 0))), ((_coconut_base_compose((_coconut_base_compose(base_layer_norm, ((_coconut_partial(_coconut.operator.mul, {1: ln_gain_attn}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: ln_bias_attn}, 2, ())), 0))), (lift(_coconut.operator.add)(ident, (_coconut_base_compose(lift(_coconut.functools.partial(einsum, "residual[q,h,d] = attn[q,k,h] * V[k,h,d]"))(attn=(_coconut_base_compose(lift(_coconut.functools.partial(einsum, "attn[q,k,h] = Q[q,h,d] * K[k,h,d]"))(Q=(_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_Q}, 2, ())), ((_coconut_partial(_coconut.operator.add, {1: b_Q}, 2, ())), 0), (_coconut.operator.methodcaller("reshape", n_seq, n_heads, n_head_size), 0))), K=(_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_K}, 2, ())), ((_coconut_partial(_coconut.operator.add, {1: b_K}, 2, ())), 0), (_coconut.operator.methodcaller("reshape", n_seq, n_heads, n_head_size), 0)))), ((_coconut_partial(_coconut.operator.truediv, {1: n_head_size**0.5}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: np.where(mask, 0, float("-inf"))}, 2, ())), 0), (_coconut.functools.partial(softmax, axis=1), 0))), V=(_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_V}, 2, ())), ((_coconut_partial(_coconut.operator.add, {1: b_V}, 2, ())), 0), (_coconut.operator.methodcaller("reshape", n_seq, n_heads, n_head_size), 0)))), (_coconut.operator.methodcaller("reshape", n_seq, n_model), 0), ((_coconut_partial(_coconut_matmul, {1: W_O}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: b_O}, 2, ())), 0)))), 0), ((_coconut_base_compose(base_layer_norm, ((_coconut_partial(_coconut.operator.mul, {1: ln_gain_ff}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: ln_bias_ff}, 2, ())), 0))), 0), (lift(_coconut.operator.add)(ident, (_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_ff_in}, 2, ())), ((_coconut_partial(_coconut.operator.add, {1: b_ff_in}, 2, ())), 0), (lift(_coconut.operator.mul)(ident, norm.cdf), 0), ((_coconut_partial(_coconut_matmul, {1: W_ff_out}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: b_ff_out}, 2, ())), 0)))), 0))), 0), ((_coconut_base_compose(base_layer_norm, ((_coconut_partial(_coconut.operator.mul, {1: ln_gain_unenc}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: ln_bias_unenc}, 2, ())), 0))), 0), ((_coconut_partial(_coconut_matmul, {1: W_unenc}, 2, ())), 0), ((_coconut_partial(_coconut.operator.truediv, {1: sample_temp}, 2, ())), 0), (_coconut.functools.partial(softmax, axis=-1), 0)))  # type: ignore  #98 (line in Coconut source)
+point_free_one_layer_transformer = (_coconut_base_compose((_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_enc}, 2, ())), ((_coconut_partial(_coconut.operator.truediv, {1: n_model**0.5}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: W_pos}, 2, ())), 0))), ((_coconut_base_compose((_coconut_base_compose(base_layer_norm, ((_coconut_partial(_coconut.operator.mul, {1: ln_gain_attn}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: ln_bias_attn}, 2, ())), 0))), (lift(_coconut.operator.add)(ident, (_coconut_base_compose(lift(_coconut.functools.partial(einsum, "residual[q,h,d] = attn[q,k,h] * V[k,h,d]"))(attn=(_coconut_base_compose(lift(_coconut.functools.partial(einsum, "attn[q,k,h] = Q[q,h,d] * K[k,h,d]"))(Q=(_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_Q}, 2, ())), ((_coconut_partial(_coconut.operator.add, {1: b_Q}, 2, ())), 0), (_coconut.operator.methodcaller("reshape", n_seq, n_heads, n_head_size), 0))), K=(_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_K}, 2, ())), ((_coconut_partial(_coconut.operator.add, {1: b_K}, 2, ())), 0), (_coconut.operator.methodcaller("reshape", n_seq, n_heads, n_head_size), 0)))), ((_coconut_partial(_coconut.operator.truediv, {1: n_head_size**0.5}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: np.where(mask, 0, float("-inf"))}, 2, ())), 0), (_coconut.functools.partial(softmax, axis=1), 0))), V=(_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_V}, 2, ())), ((_coconut_partial(_coconut.operator.add, {1: b_V}, 2, ())), 0), (_coconut.operator.methodcaller("reshape", n_seq, n_heads, n_head_size), 0)))), (_coconut.operator.methodcaller("reshape", n_seq, n_model), 0), ((_coconut_partial(_coconut_matmul, {1: W_O}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: b_O}, 2, ())), 0)))), 0), ((_coconut_base_compose(base_layer_norm, ((_coconut_partial(_coconut.operator.mul, {1: ln_gain_ff}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: ln_bias_ff}, 2, ())), 0))), 0), (lift(_coconut.operator.add)(ident, (_coconut_base_compose((_coconut_partial(_coconut_matmul, {1: W_ff_in}, 2, ())), ((_coconut_partial(_coconut.operator.add, {1: b_ff_in}, 2, ())), 0), (lift(_coconut.operator.mul)(ident, norm.cdf), 0), ((_coconut_partial(_coconut_matmul, {1: W_ff_out}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: b_ff_out}, 2, ())), 0)))), 0))), 0), ((_coconut_base_compose(base_layer_norm, ((_coconut_partial(_coconut.operator.mul, {1: ln_gain_unenc}, 2, ())), 0), ((_coconut_partial(_coconut.operator.add, {1: ln_bias_unenc}, 2, ())), 0))), 0), ((_coconut_partial(_coconut_matmul, {1: W_unenc}, 2, ())), 0), ((_coconut_base_compose((_coconut_partial(_coconut.operator.truediv, {1: sample_temp}, 2, ())), (_coconut.functools.partial(softmax, axis=-1), 0))), 0)))  # type: ignore  #98 (line in Coconut source)
 
 
 # Reference implementation:
 
-@_coconut_tco  #177 (line in Coconut source)
-def transformer_model(transformer_layers: '_coconut.typing.Sequence[(_coconut.typing.Callable[[SizedArr[_coconut.typing.Tuple[N_seq, N_model]]], SizedArr[_coconut.typing.Tuple[N_seq, N_model]]])]', one_hot_tokens: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]':  #177 (line in Coconut source)
-    residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]' = embed(one_hot_tokens)  #183 (line in Coconut source)
-    for layer in transformer_layers:  #184 (line in Coconut source)
-        residual = (layer)(residual)  #185 (line in Coconut source)
-    residual = (layer_norm)(ln_gain_unenc, ln_bias_unenc, residual)  #186 (line in Coconut source)
-    logits: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = residual @ W_unenc  #187 (line in Coconut source)
-    return _coconut_tail_call(sample_probs, logits)  #188 (line in Coconut source)
+@_coconut_tco  #180 (line in Coconut source)
+def transformer_model(transformer_layers: '_coconut.typing.Sequence[(_coconut.typing.Callable[[SizedArr[_coconut.typing.Tuple[N_seq, N_model]]], SizedArr[_coconut.typing.Tuple[N_seq, N_model]]])]', one_hot_tokens: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]':  #180 (line in Coconut source)
+    residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]' = embed(one_hot_tokens)  #186 (line in Coconut source)
+    for layer in transformer_layers:  #187 (line in Coconut source)
+        residual = (layer)(residual)  #188 (line in Coconut source)
+    residual = (layer_norm)(ln_gain_unenc, ln_bias_unenc, residual)  #189 (line in Coconut source)
+    logits: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]' = residual @ W_unenc  #190 (line in Coconut source)
+    return _coconut_tail_call(sample_probs, logits)  #191 (line in Coconut source)
 
 
-@_coconut_tco  #190 (line in Coconut source)
-def sample_probs(logits: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]':  #190 (line in Coconut source)
-    logits /= sample_temp  #193 (line in Coconut source)
-    return _coconut_tail_call((softmax), logits, axis=-1)  #194 (line in Coconut source)
+@_coconut_tco  #193 (line in Coconut source)
+def sample_probs(logits: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]':  #193 (line in Coconut source)
+    logits /= sample_temp  #196 (line in Coconut source)
+    return _coconut_tail_call((softmax), logits, axis=-1)  #197 (line in Coconut source)
 
 
-def layer_norm(gain: 'SizedArr[_coconut.typing.Tuple[N_model,]]', bias: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #196 (line in Coconut source)
-    residual -= residual.mean(axis=-1, keepdims=True)  #201 (line in Coconut source)
-    residual /= residual.var(axis=-1, keepdims=True) + eps  #202 (line in Coconut source)
-    return (residual * gain + bias)  #203 (line in Coconut source)
+def layer_norm(gain: 'SizedArr[_coconut.typing.Tuple[N_model,]]', bias: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #199 (line in Coconut source)
+    residual -= residual.mean(axis=-1, keepdims=True)  #204 (line in Coconut source)
+    residual /= residual.var(axis=-1, keepdims=True) + eps  #205 (line in Coconut source)
+    return (residual * gain + bias)  #206 (line in Coconut source)
 
 
-def embed(one_hot_tokens: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #205 (line in Coconut source)
-    return (one_hot_tokens @ W_enc / n_model**0.5 + W_pos)  #208 (line in Coconut source)
+def embed(one_hot_tokens: 'SizedArr[_coconut.typing.Tuple[N_seq, N_vocab]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #208 (line in Coconut source)
+    return (one_hot_tokens @ W_enc / n_model**0.5 + W_pos)  #211 (line in Coconut source)
 
 
-@_coconut_tco  #210 (line in Coconut source)
-def attn_prep(W: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]':  #210 (line in Coconut source)
-    residual = residual @ W + b  #215 (line in Coconut source)
-    return _coconut_tail_call(residual.reshape, n_seq, n_heads, n_head_size)  #216 (line in Coconut source)
+@_coconut_tco  #213 (line in Coconut source)
+def attn_prep(W: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]':  #213 (line in Coconut source)
+    residual = residual @ W + b  #218 (line in Coconut source)
+    return _coconut_tail_call(residual.reshape, n_seq, n_heads, n_head_size)  #219 (line in Coconut source)
 
 
-def multi_head_attn(W_Q: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_Q: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_K: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_K: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_V: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_V: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_O: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_O: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #218 (line in Coconut source)
+def multi_head_attn(W_Q: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_Q: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_K: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_K: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_V: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_V: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_O: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_O: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #221 (line in Coconut source)
 
-    Q: 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]' = (attn_prep)(W_Q, b_Q, residual)  #230 (line in Coconut source)
-    K: 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]' = (attn_prep)(W_K, b_K, residual)  #231 (line in Coconut source)
-    V: 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]' = (attn_prep)(W_V, b_V, residual)  #232 (line in Coconut source)
+    Q: 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]' = (attn_prep)(W_Q, b_Q, residual)  #233 (line in Coconut source)
+    K: 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]' = (attn_prep)(W_K, b_K, residual)  #234 (line in Coconut source)
+    V: 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]' = (attn_prep)(W_V, b_V, residual)  #235 (line in Coconut source)
 
-    attn: 'SizedArr[_coconut.typing.Tuple[N_seq, N_seq, N_heads]]' = einsum("attn[q,k,h] = Q[q,h,d] * K[k,h,d]", Q, K)  #234 (line in Coconut source)
-    attn /= n_head_size**0.5  #235 (line in Coconut source)
-    attn += np.where(mask, 0, float("-inf"))  #236 (line in Coconut source)
-    attn = (softmax)(attn, axis=1)  #237 (line in Coconut source)
+    attn: 'SizedArr[_coconut.typing.Tuple[N_seq, N_seq, N_heads]]' = einsum("attn[q,k,h] = Q[q,h,d] * K[k,h,d]", Q, K)  #237 (line in Coconut source)
+    attn /= n_head_size**0.5  #238 (line in Coconut source)
+    attn += np.where(mask, 0, float("-inf"))  #239 (line in Coconut source)
+    attn = (softmax)(attn, axis=1)  #240 (line in Coconut source)
 
-    output: 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]' = einsum("residual[q,h,d] = attn[q,k,h] * V[k,h,d]", attn, V)  #239 (line in Coconut source)
-    new_residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]' = output.reshape(n_seq, n_model)  #240 (line in Coconut source)
-    return (new_residual @ W_O + b_O)  #241 (line in Coconut source)
-
-
-def feed_forward(W_ff_in: 'SizedArr[_coconut.typing.Tuple[N_model, N_ff]]', b_ff_in: 'SizedArr[_coconut.typing.Tuple[N_ff,]]', W_ff_out: 'SizedArr[_coconut.typing.Tuple[N_ff, N_model]]', b_ff_out: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #243 (line in Coconut source)
-    ff: 'SizedArr[_coconut.typing.Tuple[N_seq, N_ff]]' = residual @ W_ff_in + b_ff_in  #250 (line in Coconut source)
-    ff = (activation)(ff)  #251 (line in Coconut source)
-    return (ff @ W_ff_out + b_ff_out)  #252 (line in Coconut source)
+    output: 'SizedArr[_coconut.typing.Tuple[N_seq, N_heads, N_head_size]]' = einsum("residual[q,h,d] = attn[q,k,h] * V[k,h,d]", attn, V)  #242 (line in Coconut source)
+    new_residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]' = output.reshape(n_seq, n_model)  #243 (line in Coconut source)
+    return (new_residual @ W_O + b_O)  #244 (line in Coconut source)
 
 
-def activation(ff: 'SizedArr[_coconut.typing.Tuple[N_seq, N_ff]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_ff]]':  #254 (line in Coconut source)
-    return (ff * norm.cdf(ff))  #257 (line in Coconut source)
+def feed_forward(W_ff_in: 'SizedArr[_coconut.typing.Tuple[N_model, N_ff]]', b_ff_in: 'SizedArr[_coconut.typing.Tuple[N_ff,]]', W_ff_out: 'SizedArr[_coconut.typing.Tuple[N_ff, N_model]]', b_ff_out: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #246 (line in Coconut source)
+    ff: 'SizedArr[_coconut.typing.Tuple[N_seq, N_ff]]' = residual @ W_ff_in + b_ff_in  #253 (line in Coconut source)
+    ff = (activation)(ff)  #254 (line in Coconut source)
+    return (ff @ W_ff_out + b_ff_out)  #255 (line in Coconut source)
 
 
-def transformer_layer(ln_gain_attn: 'SizedArr[_coconut.typing.Tuple[N_model,]]', ln_bias_attn: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_Q: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_Q: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_K: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_K: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_V: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_V: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_O: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_O: 'SizedArr[_coconut.typing.Tuple[N_model,]]', ln_gain_ff: 'SizedArr[_coconut.typing.Tuple[N_model,]]', ln_bias_ff: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_ff_in: 'SizedArr[_coconut.typing.Tuple[N_model, N_ff]]', b_ff_in: 'SizedArr[_coconut.typing.Tuple[N_ff,]]', W_ff_out: 'SizedArr[_coconut.typing.Tuple[N_ff, N_model]]', b_ff_out: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #259 (line in Coconut source)
-
-    residual = (layer_norm)(ln_gain_attn, ln_bias_attn, residual)  #279 (line in Coconut source)
-    attn: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]' = (multi_head_attn)(W_Q, b_Q, W_K, b_K, W_V, b_V, W_O, b_O, residual)  #280 (line in Coconut source)
-    residual += attn  #281 (line in Coconut source)
-
-    residual = (layer_norm)(ln_gain_ff, ln_bias_ff, residual)  #283 (line in Coconut source)
-    ff: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]' = (feed_forward)(W_ff_in, b_ff_in, W_ff_out, b_ff_out, residual)  #284 (line in Coconut source)
-    residual += ff  #285 (line in Coconut source)
-
-    return (residual)  #287 (line in Coconut source)
+def activation(ff: 'SizedArr[_coconut.typing.Tuple[N_seq, N_ff]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_ff]]':  #257 (line in Coconut source)
+    return (ff * norm.cdf(ff))  #260 (line in Coconut source)
 
 
-one_layer_transformer = _coconut.functools.partial(transformer_model, [_coconut.functools.partial(transformer_layer, ln_gain_attn, ln_bias_attn, W_Q, b_Q, W_K, b_K, W_V, b_V, W_O, b_O, ln_gain_ff, ln_bias_ff, W_ff_in, b_ff_in, W_ff_out, b_ff_out),])  #289 (line in Coconut source)
+def transformer_layer(ln_gain_attn: 'SizedArr[_coconut.typing.Tuple[N_model,]]', ln_bias_attn: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_Q: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_Q: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_K: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_K: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_V: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_V: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_O: 'SizedArr[_coconut.typing.Tuple[N_model, N_model]]', b_O: 'SizedArr[_coconut.typing.Tuple[N_model,]]', ln_gain_ff: 'SizedArr[_coconut.typing.Tuple[N_model,]]', ln_bias_ff: 'SizedArr[_coconut.typing.Tuple[N_model,]]', W_ff_in: 'SizedArr[_coconut.typing.Tuple[N_model, N_ff]]', b_ff_in: 'SizedArr[_coconut.typing.Tuple[N_ff,]]', W_ff_out: 'SizedArr[_coconut.typing.Tuple[N_ff, N_model]]', b_ff_out: 'SizedArr[_coconut.typing.Tuple[N_model,]]', residual: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]',) -> 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]':  #262 (line in Coconut source)
+
+    residual = (layer_norm)(ln_gain_attn, ln_bias_attn, residual)  #282 (line in Coconut source)
+    attn: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]' = (multi_head_attn)(W_Q, b_Q, W_K, b_K, W_V, b_V, W_O, b_O, residual)  #283 (line in Coconut source)
+    residual += attn  #284 (line in Coconut source)
+
+    residual = (layer_norm)(ln_gain_ff, ln_bias_ff, residual)  #286 (line in Coconut source)
+    ff: 'SizedArr[_coconut.typing.Tuple[N_seq, N_model]]' = (feed_forward)(W_ff_in, b_ff_in, W_ff_out, b_ff_out, residual)  #287 (line in Coconut source)
+    residual += ff  #288 (line in Coconut source)
+
+    return (residual)  #290 (line in Coconut source)
+
+
+one_layer_transformer = _coconut.functools.partial(transformer_model, [_coconut.functools.partial(transformer_layer, ln_gain_attn, ln_bias_attn, W_Q, b_Q, W_K, b_K, W_V, b_V, W_O, b_O, ln_gain_ff, ln_bias_ff, W_ff_in, b_ff_in, W_ff_out, b_ff_out),])  #292 (line in Coconut source)

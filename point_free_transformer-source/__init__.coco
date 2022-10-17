@@ -167,8 +167,11 @@ point_free_one_layer_transformer = (
         ..> (. + ln_bias_unenc)
     )
     ..> (. @ W_unenc)
-    ..> (. / sample_temp)
-    ..> softmax$(axis=-1)
+    ..> (
+        # sample_probs
+        (. / sample_temp)
+        ..> softmax$(axis=-1)
+    )
 )  # type: ignore
 
 
