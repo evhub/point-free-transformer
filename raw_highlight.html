@@ -280,10 +280,12 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]:</span>
 
     <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer_norm</span><span class="o">$</span><span class="p">(</span><span class="n">ln_gain_attn</span><span class="p">,</span> <span class="n">ln_bias_attn</span><span class="p">)</span>
+
     <span class="n">attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">|&gt;</span> <span class="n">multi_head_attn</span><span class="o">$</span><span class="p">(</span><span class="n">W_Q</span><span class="p">,</span> <span class="n">b_Q</span><span class="p">,</span> <span class="n">W_K</span><span class="p">,</span> <span class="n">b_K</span><span class="p">,</span> <span class="n">W_V</span><span class="p">,</span> <span class="n">b_V</span><span class="p">,</span> <span class="n">W_O</span><span class="p">,</span> <span class="n">b_O</span><span class="p">)</span>
     <span class="n">residual</span> <span class="o">+=</span> <span class="n">attn</span>
 
     <span class="n">residual</span> <span class="o">|&gt;=</span> <span class="n">layer_norm</span><span class="o">$</span><span class="p">(</span><span class="n">ln_gain_ff</span><span class="p">,</span> <span class="n">ln_bias_ff</span><span class="p">)</span>
+
     <span class="n">ff</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_model</span><span class="p">)]</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">|&gt;</span> <span class="n">feed_forward</span><span class="o">$</span><span class="p">(</span><span class="n">W_ff_in</span><span class="p">,</span> <span class="n">b_ff_in</span><span class="p">,</span> <span class="n">W_ff_out</span><span class="p">,</span> <span class="n">b_ff_out</span><span class="p">)</span>
     <span class="n">residual</span> <span class="o">+=</span> <span class="n">ff</span>
 

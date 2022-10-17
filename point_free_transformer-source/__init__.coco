@@ -280,10 +280,12 @@ def transformer_layer(
 ) -> SizedArr[(N_seq; N_model)]:
 
     residual |>= layer_norm$(ln_gain_attn, ln_bias_attn)
+
     attn: SizedArr[(N_seq; N_model)] = residual |> multi_head_attn$(W_Q, b_Q, W_K, b_K, W_V, b_V, W_O, b_O)
     residual += attn
 
     residual |>= layer_norm$(ln_gain_ff, ln_bias_ff)
+
     ff: SizedArr[(N_seq; N_model)] = residual |> feed_forward$(W_ff_in, b_ff_in, W_ff_out, b_ff_out)
     residual += ff
 
