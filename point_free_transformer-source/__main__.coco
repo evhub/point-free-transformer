@@ -1,0 +1,17 @@
+from point_free_transformer import *
+
+def run_tests() -> None:
+    example_one_hot_tokens: SizedArr[(N_seq; N_vocab)] = np.eye(n_vocab)[np.random.randint(0, n_vocab, n_seq)]
+
+    one_layer_transformer_logits: SizedArr[(N_seq; N_vocab)] = one_layer_transformer(example_one_hot_tokens)
+    assert one_layer_transformer_logits.shape == (n_seq, n_vocab)
+    assert not np.isnan(one_layer_transformer_logits).any()
+
+    point_free_one_layer_transformer_logits: SizedArr[(N_seq; N_vocab)] = point_free_one_layer_transformer(example_one_hot_tokens)
+    assert point_free_one_layer_transformer_logits.shape == (n_seq, n_vocab)
+    assert not np.isnan(point_free_one_layer_transformer_logits).any()
+
+    assert (np.abs(one_layer_transformer_logits - point_free_one_layer_transformer_logits) < eps).all()
+
+if __name__ == "__main__":
+    run_tests()

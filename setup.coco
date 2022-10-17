@@ -1,0 +1,23 @@
+import setuptools
+
+VERSION = "0.0.1"
+
+setuptools.setup(
+    name="point-free-transformer",
+    version=VERSION,
+    description="A point-free implementation of a transformer-based language model (for learning/reference purposes).",
+    url="https://github.com/evhub/point-free-transformer",
+    author="Evan Hubinger",
+    author_email="evanjhub@gmail.com",
+    packages=setuptools.find_packages(),
+    install_requires=[
+        "numpy",
+        "scipy",
+        "better_einsum",
+    ],
+    extras_require={
+        "dev": [
+            "coconut[mypy]",
+        ],
+    },
+)
