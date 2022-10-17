@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x93e37005
+# __coconut_hash__ = 0x2bb244e8
 
 # Compiled with Coconut version 2.0.0 [How Not to Be Seen]
 
@@ -49,15 +49,15 @@ def highlight() -> 'None':  #9 (line in Coconut source)
         raw_highlight = f.read()  #14 (line in Coconut source)
 
     full_html = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-    <style>
-    {raw_css}
-    </style>
-    </head>
-    {raw_highlight}
-    </html>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+{raw_css}
+</style>
+</head>
+{raw_highlight}
+</html>
     """.strip().format(raw_css=raw_css, raw_highlight=raw_highlight)  #26 (line in Coconut source)
 
     with open(full_html_file, "w") as f:  #31 (line in Coconut source)

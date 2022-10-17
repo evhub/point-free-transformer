@@ -14,15 +14,15 @@ def highlight() -> None:
         raw_highlight = f.read()
 
     full_html = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-    <style>
-    {raw_css}
-    </style>
-    </head>
-    {raw_highlight}
-    </html>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+{raw_css}
+</style>
+</head>
+{raw_highlight}
+</html>
     """.strip().format(
         raw_css=raw_css,
         raw_highlight=raw_highlight,
