@@ -40,7 +40,7 @@ assert n_head_size == n_model // n_heads
 N_ff = Literal[128]
 n_ff: int = from_literal(N_ff)
 
-eps = 1e-5
+eps: float = 1e-5
 
 
 # Weights:
@@ -55,7 +55,7 @@ ln_bias_unenc: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
 
 mask: SizedArr[(N_seq; N_seq; Literal[1])] = np.tril(np.ones((n_seq, n_seq)))[..., None]
 
-sample_temp: int = 1
+sample_temp: float = 1.0
 
 ln_gain_attn: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))
 ln_bias_attn: SizedArr[(N_model;)] = np.random.normal(size=(n_model,))

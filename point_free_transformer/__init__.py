@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xb2e6c245
+# __coconut_hash__ = 0xc59768c5
 
 # Compiled with Coconut version 2.0.0 [How Not to Be Seen]
 
@@ -76,7 +76,7 @@ assert n_head_size == n_model // n_heads  #38 (line in Coconut source)
 N_ff = Literal[128]  #40 (line in Coconut source)
 n_ff: 'int' = from_literal(N_ff)  #41 (line in Coconut source)
 
-eps = 1e-5  #43 (line in Coconut source)
+eps: 'float' = 1e-5  #43 (line in Coconut source)
 
 
 # Weights:
@@ -91,7 +91,7 @@ ln_bias_unenc: 'SizedArr[_coconut.typing.Tuple[N_model,]]' = np.random.normal(si
 
 mask: 'SizedArr[_coconut.typing.Tuple[N_seq, N_seq, Literal[1]]]' = np.tril(np.ones((n_seq, n_seq)))[..., None]  #56 (line in Coconut source)
 
-sample_temp: 'int' = 1  #58 (line in Coconut source)
+sample_temp: 'float' = 1.0  #58 (line in Coconut source)
 
 ln_gain_attn: 'SizedArr[_coconut.typing.Tuple[N_model,]]' = np.random.normal(size=(n_model,))  #60 (line in Coconut source)
 ln_bias_attn: 'SizedArr[_coconut.typing.Tuple[N_model,]]' = np.random.normal(size=(n_model,))  #61 (line in Coconut source)

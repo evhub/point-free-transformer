@@ -40,7 +40,7 @@
 <span class="n">N_ff</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span>
 <span class="n">n_ff</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">from_literal</span><span class="p">(</span><span class="n">N_ff</span><span class="p">)</span>
 
-<span class="n">eps</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">5</span>
+<span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">5</span>
 
 
 <span class="c1"># Weights:</span>
@@ -55,7 +55,7 @@
 
 <span class="n">mask</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_seq</span><span class="p">;</span> <span class="n">N_seq</span><span class="p">;</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_seq</span><span class="p">,</span> <span class="n">n_seq</span><span class="p">)))[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
 
-<span class="n">sample_temp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">sample_temp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1.0</span>
 
 <span class="n">ln_gain_attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
 <span class="n">ln_bias_attn</span><span class="p">:</span> <span class="n">SizedArr</span><span class="p">[(</span><span class="n">N_model</span><span class="p">;)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_model</span><span class="p">,))</span>
