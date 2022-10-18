@@ -10,7 +10,7 @@ highlight: install
 
 .PHONY: install
 install: build
-	pip install -Ue .[dev]
+	pip install -Ue .
 
 .PHONY: build
 build: clean
